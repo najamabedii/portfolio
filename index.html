@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hassan Raza — Chartered Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════ RESET + ROOT */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #07090f;
+  --bg2:     #0b0d18;
+  --card:    rgba(255,255,255,0.04);
+  --accent:  #3b82f6;
+  --accent2: #60a5fa;
+  --glow:    rgba(59,130,246,0.12);
+  --text:    #f1f5f9;
+  --muted:   rgba(241,245,249,0.52);
+  --subtle:  rgba(241,245,249,0.22);
+  --border:  rgba(255,255,255,0.07);
+  --baccent: rgba(59,130,246,0.28);
+  --ease:    cubic-bezier(0.76, 0, 0.24, 1);
+  --eout:    cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════ CUSTOM CURSOR */
+@media (pointer: fine) { body, a, button { cursor: none; } }
+@media (pointer: coarse) { .cur-dot, .cur-ring { display: none; } }
+
+.cur-dot {
+  position: fixed; top: 0; left: 0;
+  width: 7px; height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: width .3s var(--eout), height .3s var(--eout), opacity .25s, background .3s;
+}
+.cur-ring {
+  position: fixed; top: 0; left: 0;
+  width: 36px; height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform;
+  opacity: .45;
+  transition: width .4s var(--eout), height .4s var(--eout), opacity .3s, background .3s, border-color .3s;
+}
+.cur-dot.on  { width: 0; height: 0; opacity: 0; }
+.cur-ring.on { width: 58px; height: 58px; opacity: .65; background: rgba(59,130,246,.08); }
+
+/* ═══════════════════════════════════════════ LOADER */
+.loader {
+  position: fixed; inset: 0; z-index: 2000;
+  background: #030408;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 1s var(--ease);
+  transform-origin: top;
+}
+.loader.done { transform: translateY(-100%); }
+
+.ld-inner { text-align: center; }
+
+.ld-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 110px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  display: block;
+  background: linear-gradient(135deg, #f1f5f9 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  min-width: 200px;
+}
+.ld-bar {
+  width: 180px; height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 28px auto 0;
+  overflow: hidden;
+}
+.ld-fill {
+  height: 100%; width: 0%;
+  background: var(--accent);
+  transition: width .06s linear;
+}
+.ld-tag {
+  font-size: 10px; letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-top: 20px;
+}
+
+/* ═══════════════════════════════════════════ BUTTONS (outline → fill) */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; letter-spacing: .08em;
+  text-transform: uppercase; font-weight: 500;
+  text-decoration: none;
+  position: relative; overflow: hidden;
+  border-radius: 3px;
+  transition: color .45s var(--ease);
+}
+.btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  transform: scaleX(0); transform-origin: left;
+  border-radius: inherit;
+  transition: transform .5s var(--ease);
+}
+.btn:hover::before { transform: scaleX(1); }
+
+.btn-blue   { border: 1px solid var(--accent); color: var(--accent); }
+.btn-blue::before  { background: var(--accent); }
+.btn-blue:hover    { color: #fff; }
+
+.btn-ghost  { border: 1px solid rgba(241,245,249,.18); color: var(--muted); }
+.btn-ghost::before { background: rgba(241,245,249,.06); }
+.btn-ghost:hover   { color: var(--text); }
+
+.btn-t, .btn-arr { position: relative; z-index: 1; }
+.btn-arr { display: flex; align-items: center; }
+.btn-arr-line {
+  width: 18px; height: 1px;
+  background: currentColor;
+  transition: width .3s var(--eout);
+}
+.btn:hover .btn-arr-line { width: 30px; }
+.btn-arr svg {
+  width: 7px; height: 7px;
+  stroke: currentColor; fill: none; stroke-width: 1.5;
+}
+
+/* ═══════════════════════════════════════════ NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  padding: 0 64px; height: 76px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background .4s, border-color .4s;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(7,9,15,.88);
+  backdrop-filter: blur(20px);
+  border-color: var(--border);
+}
+
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--text); text-decoration: none;
+  position: relative; z-index: 1;
+}
+.nav-logo span {
+  color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-r { display: flex; align-items: center; gap: 44px; }
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  position: relative; transition: color .2s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width .3s var(--ease);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-avail {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .07em;
+  color: var(--subtle);
+}
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e;
+  animation: pulse-green 2.2s ease infinite;
+}
+@keyframes pulse-green {
+  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+}
+
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; padding: 4px;
+}
+.hamburger span {
+  display: block; width: 22px; height: 1px;
+  background: var(--text);
+  transition: transform .35s var(--ease), opacity .3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ── Mobile Menu */
+.mob-menu {
+  display: none; position: fixed; inset: 0;
+  background: #030408; z-index: 490;
+  padding: 96px 40px 60px;
+  flex-direction: column; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s var(--ease);
+}
+.mob-menu.open { opacity: 1; pointer-events: auto; }
+.mob-menu ul { list-style: none; }
+.mob-menu li { border-bottom: 1px solid var(--border); }
+.mob-menu a {
+  display: block; padding: 22px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 42px; font-weight: 600; color: var(--text);
+  text-decoration: none; letter-spacing: -.02em;
+  transition: color .2s;
+}
+.mob-menu a:hover { color: var(--accent); }
+.mob-foot {
+  margin-top: auto;
+  font-size: 11px; letter-spacing: .12em;
+  color: var(--subtle);
+}
+
+/* ═══════════════════════════════════════════ HERO */
+.hero {
+  min-height: 100vh;
+  padding: 0 64px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.hero-bg-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 65% 15%, rgba(59,130,246,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 50% at 8% 85%, rgba(99,102,241,.05) 0%, transparent 60%);
+}
+.hero-bg-grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(59,130,246,.14) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: .28;
+}
+
+/* ── Topbar */
+.hero-topbar {
+  padding-top: 96px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 1; flex-shrink: 0;
+  opacity: 0; animation: fadeIn .8s ease .1s forwards;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 18px;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: rgba(255,255,255,.03);
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; animation: pulse-green 2.2s ease infinite;
+}
+.hero-topbar-r {
+  font-size: 11px; letter-spacing: .14em; color: var(--subtle);
+}
+
+/* ── Name — flex:1 pushes it down naturally */
+.hero-main {
+  flex: 1;
+  display: flex; align-items: flex-end;
+  padding-bottom: 32px;
+  position: relative; z-index: 1;
+}
+.hero-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(80px, 11.5vw, 158px);
+  font-weight: 700;
+  line-height: .87; letter-spacing: -.05em;
+  color: var(--text);
+  opacity: 0; animation: slideUp 1s var(--eout) .3s forwards;
+}
+.hero-name .gr {
+  display: block;
+  background: linear-gradient(135deg, #3b82f6 10%, #60a5fa 55%, #93c5fd 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Divider */
+.hero-divider {
+  flex-shrink: 0; width: 100%; height: 1px;
+  background: var(--border);
+  position: relative; z-index: 1;
+  opacity: 0; animation: fadeIn .6s ease .88s forwards;
+}
+.hero-divider::before {
+  content: '';
+  position: absolute; left: 0; top: 0;
+  width: 80px; height: 1px; background: var(--accent);
+}
+
+/* ── Bottom content row */
+.hero-bottom {
+  flex-shrink: 0;
+  padding: 28px 0 52px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 60px; align-items: start;
+  position: relative; z-index: 1;
+  opacity: 0; animation: slideUp .9s var(--eout) 1s forwards;
+}
+
+.hero-sub {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
+}
+.hero-sub-bar { width: 28px; height: 1px; background: var(--accent); flex-shrink: 0; }
+.hero-sub-txt {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 400; color: var(--muted); letter-spacing: .01em;
+}
+.hero-desc {
+  font-size: 14px; line-height: 1.85;
+  color: var(--muted); font-weight: 300;
+  max-width: 460px; margin-bottom: 28px;
+}
+.hero-acts { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.hero-scrl {
+  display: flex; align-items: center; gap: 10px; margin-top: 24px;
+}
+.hero-scrl-bar {
+  width: 1px; height: 36px; background: var(--accent);
+  transform-origin: top; animation: scrollAnim 1.8s ease 1.8s infinite;
+}
+@keyframes scrollAnim {
+  0%   { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(0); opacity: 0; }
+}
+.hero-scrl-lbl {
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--subtle);
+}
+
+/* ── Stats 2×2 grid (right side of bottom row) */
+.hero-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); flex-shrink: 0;
+}
+.hstat {
+  background: rgba(255,255,255,.025);
+  padding: 20px 24px; text-align: center;
+  transition: background .3s; min-width: 112px;
+}
+.hstat:hover { background: rgba(59,130,246,.07); }
+.hstat-n {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 30px; font-weight: 700;
+  display: block; letter-spacing: -.04em; line-height: 1;
+  background: linear-gradient(135deg, #f1f5f9 0%, #93c5fd 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hstat-l {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--subtle); display: block; margin-top: 6px;
+}
+
+/* ═══════════════════════════════════════════ MARQUEE */
+.marquee-wrap {
+  background: #04060c;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative; z-index: 1;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 30s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.mq-chunk {
+  display: flex; align-items: center;
+  gap: 36px; padding-right: 36px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.mq-w {
+  font-size: 10px; letter-spacing: .24em;
+  text-transform: uppercase; font-weight: 500;
+  color: var(--subtle);
+}
+.mq-s {
+  color: var(--accent); font-size: 12px; opacity: .7;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════ REVEAL SYSTEM */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity .85s var(--eout), transform .85s var(--eout);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+.rev-l {
+  opacity: 0; transform: translateX(-28px);
+  transition: opacity .85s var(--eout), transform .85s var(--eout);
+}
+.rev-l.in { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════ SECTION COMMON */
+section { position: relative; z-index: 1; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 48px;
+}
+.eyebrow-bar {
+  width: 28px; height: 1px;
+  background: var(--accent); flex-shrink: 0;
+}
+.eyebrow-txt {
+  font-size: 10px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--accent);
+  font-weight: 500;
+}
+
+.sec-h {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(34px, 3.8vw, 52px);
+  font-weight: 700; line-height: 1.05;
+  color: var(--text); letter-spacing: -.03em;
+}
+.sec-h .gr {
+  background: linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════ ABOUT */
+.about-sec {
+  padding: 120px 0;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1.65fr;
+  gap: 80px; align-items: start;
+}
+
+.about-left-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 150px; font-weight: 700;
+  line-height: .85; letter-spacing: -.06em;
+  display: block;
+  background: linear-gradient(160deg, rgba(59,130,246,.35) 0%, rgba(59,130,246,.08) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+  user-select: none;
+}
+.about-left-lbl {
+  font-size: 10px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--accent);
+  margin-top: 16px; display: block;
+}
+.about-left-body {
+  font-size: 13px; line-height: 1.8;
+  color: var(--subtle); font-weight: 300;
+  margin-top: 20px; max-width: 220px;
+}
+
+.about-head {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 600; line-height: 1.2;
+  color: var(--text); letter-spacing: -.02em;
+  margin-bottom: 24px;
+}
+
+.about-right p {
+  font-size: 14px; line-height: 1.9;
+  color: var(--muted); font-weight: 300;
+  margin-bottom: 16px; max-width: 560px;
+}
+
+.chips {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 32px;
+}
+.chip {
+  padding: 7px 18px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent);
+  font-weight: 500;
+  transition: background .3s, border-color .3s;
+}
+.chip:hover { background: rgba(59,130,246,.08); border-color: var(--baccent); }
+
+/* ═══════════════════════════════════════════ SERVICES */
+.svc-sec {
+  background: var(--bg2);
+  padding: 120px 0;
+  border-top: 1px solid var(--border);
+}
+
+.svc-top {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: end;
+  margin-bottom: 64px;
+}
+.svc-top-r {
+  font-size: 14px; line-height: 1.8;
+  color: var(--muted); font-weight: 300;
+  align-self: end;
+}
+
+.svc-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.svc-card {
+  background: var(--bg2);
+  padding: 44px 36px 48px;
+  position: relative; overflow: hidden;
+  transition: background .35s, box-shadow .35s;
+}
+.svc-card:hover {
+  background: rgba(59,130,246,.05);
+  box-shadow: inset 0 0 0 1px rgba(59,130,246,.25);
+}
+.svc-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width .5s var(--ease);
+}
+.svc-card:hover::after { width: 100%; }
+
+.svc-icon {
+  width: 22px; height: 22px;
+  stroke: var(--accent); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  margin-bottom: 20px;
+  opacity: .7; display: block;
+  transition: opacity .3s, transform .3s;
+}
+.svc-card:hover .svc-icon { opacity: 1; transform: scale(1.1); }
+
+.svc-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 60px; font-weight: 700;
+  color: rgba(59,130,246,.07);
+  line-height: 1; display: block;
+  position: absolute; top: 24px; right: 28px;
+  letter-spacing: -.04em;
+  transition: color .4s;
+  user-select: none;
+}
+.svc-card:hover .svc-num { color: rgba(59,130,246,.12); }
+
+.svc-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600;
+  color: var(--text); margin-bottom: 12px;
+  letter-spacing: -.01em;
+}
+.svc-desc {
+  font-size: 13px; line-height: 1.75;
+  color: var(--muted); font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════ EXPERIENCE */
+.exp-sec {
+  padding: 120px 0;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.exp-top {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: end;
+  margin-bottom: 80px;
+}
+.exp-top-r {
+  font-size: 14px; line-height: 1.8;
+  color: var(--muted); font-weight: 300;
+}
+
+.timeline { position: relative; }
+.tl-rule {
+  position: absolute; left: 0; top: 10px; bottom: 10px;
+  width: 1px; background: var(--border);
+}
+
+.tl-item {
+  display: grid; grid-template-columns: 180px 1fr;
+  gap: 44px; padding-bottom: 60px;
+  position: relative;
+  transition: opacity .3s;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item:hover { opacity: 1 !important; }
+.timeline:hover .tl-item { opacity: .5; }
+.timeline:hover .tl-item:hover { opacity: 1; }
+
+.tl-dot {
+  position: absolute; left: -5px; top: 10px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+  transition: box-shadow .3s;
+  z-index: 1;
+}
+.tl-item:hover .tl-dot { box-shadow: 0 0 0 6px rgba(59,130,246,.12); }
+
+.tl-l { padding-left: 28px; }
+.tl-year {
+  font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent);
+  font-weight: 500; line-height: 1.5;
+}
+
+.tl-role {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 600;
+  color: var(--text); margin-bottom: 4px;
+  letter-spacing: -.015em;
+}
+.tl-co {
+  font-size: 13px; color: var(--subtle);
+  font-weight: 300; margin-bottom: 12px;
+  letter-spacing: .02em;
+}
+.tl-desc {
+  font-size: 14px; line-height: 1.75;
+  color: var(--muted); font-weight: 300;
+  max-width: 520px;
+}
+
+/* ═══════════════════════════════════════════ CONTACT */
+.contact-sec {
+  background: var(--bg2);
+  padding: 120px 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.contact-glow {
+  position: absolute;
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(59,130,246,.1) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; z-index: 0;
+}
+
+.contact-sec .wrap { position: relative; z-index: 1; }
+
+.contact-pre {
+  display: flex; align-items: center;
+  justify-content: center; gap: 16px;
+  font-size: 10px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 24px;
+}
+.contact-pre::before, .contact-pre::after {
+  content: ''; width: 40px; height: 1px;
+  background: var(--accent); opacity: .4;
+}
+
+.contact-h {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(48px, 6.5vw, 84px);
+  font-weight: 700; line-height: .95;
+  letter-spacing: -.04em;
+  color: var(--text); margin-bottom: 20px;
+}
+.contact-h .gr {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contact-body {
+  font-size: 14px; color: var(--muted);
+  font-weight: 300; line-height: 1.75;
+  max-width: 440px; margin: 0 auto 48px;
+}
+
+.contact-mail {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 500; letter-spacing: -.01em;
+  color: var(--accent2); text-decoration: none;
+  margin-bottom: 52px;
+  transition: color .3s;
+}
+.contact-mail:hover { color: var(--text); }
+
+.contact-btns {
+  display: flex; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+  margin-bottom: 68px;
+}
+
+.contact-strip {
+  display: flex; justify-content: center;
+  gap: 60px; flex-wrap: wrap;
+  padding-top: 44px;
+  border-top: 1px solid var(--border);
+}
+.cd-lbl {
+  font-size: 10px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--subtle);
+  display: block; margin-bottom: 6px;
+}
+.cd-val {
+  font-size: 14px; font-weight: 400;
+  color: rgba(241,245,249,.65);
+}
+
+/* ═══════════════════════════════════════════ FOOTER */
+footer {
+  background: #030408;
+  padding: 26px 64px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(255,255,255,.03);
+  position: relative; z-index: 1;
+}
+footer p {
+  font-size: 11px; color: var(--subtle);
+  letter-spacing: .05em;
+}
+.ft-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: rgba(241,245,249,.2);
+  letter-spacing: -.01em; text-align: center;
+}
+.ft-r {
+  font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, rgba(59,130,246,.55), rgba(96,165,250,.55));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════ KEYFRAMES */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════ RESPONSIVE */
+@media (max-width: 1024px) {
+  .wrap { padding: 0 40px; }
+  nav { padding: 0 40px; }
+  .hero { padding: 0 40px; }
+  .hero-bottom { gap: 40px; }
+  .about-grid { gap: 48px; }
+  .svc-top { grid-template-columns: 1fr; gap: 20px; }
+  .exp-top { grid-template-columns: 1fr; gap: 24px; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .nav-links, .nav-avail { display: none; }
+  .hamburger { display: flex; }
+  .mob-menu { display: flex; }
+  footer { padding: 20px 24px; }
+  .ft-brand { display: none; }
+
+  .hero { padding: 0 24px; }
+  .hero-topbar { padding-top: 88px; }
+  .hero-topbar-r { display: none; }
+  .hero-name { font-size: clamp(58px, 13vw, 92px); }
+  .hero-bottom { grid-template-columns: 1fr; gap: 28px; padding-bottom: 44px; }
+  .hero-stats { grid-template-columns: repeat(4, 1fr); }
+  .hstat { padding: 14px 10px; min-width: 0; }
+  .hstat-n { font-size: 22px; }
+
+  .wrap { padding: 0 24px; }
+  .about-sec, .svc-sec, .exp-sec, .contact-sec { padding: 80px 0; }
+
+  .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  .about-left-num { font-size: 100px; }
+  .about-left-body { max-width: 100%; }
+
+  .svc-grid { grid-template-columns: 1fr; }
+
+  .tl-item { grid-template-columns: 1fr; gap: 8px; }
+  .tl-l { padding-left: 20px; }
+  .tl-rule { display: none; }
+  .tl-dot { display: none; }
+
+  .contact-h { font-size: clamp(40px, 11vw, 64px); }
+  .contact-strip { gap: 36px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="ld-inner">
+    <span class="ld-num" id="ldNum">0</span>
+    <div class="ld-bar"><div class="ld-fill" id="ldFill"></div></div>
+    <p class="ld-tag">Loading Portfolio</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Hassan <span>Raza</span></a>
+  <div class="nav-r">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-avail">
+      <span class="nav-dot"></span>
+      Available
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <ul>
+    <li><a href="#about" class="ml">About</a></li>
+    <li><a href="#services" class="ml">Services</a></li>
+    <li><a href="#experience" class="ml">Experience</a></li>
+    <li><a href="#contact" class="ml">Contact</a></li>
+  </ul>
+  <p class="mob-foot">ICMA Qualified · Karachi, Pakistan</p>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-bg-grid"></div>
+
+  <!-- top bar: badge left, location right -->
+  <div class="hero-topbar">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      ICMA Qualified Professional
+    </div>
+    <span class="hero-topbar-r">Karachi, Pakistan · 2026</span>
+  </div>
+
+  <!-- name fills the flexible middle space -->
+  <div class="hero-main">
+    <h1 class="hero-name">Hassan<span class="gr">Raza.</span></h1>
+  </div>
+
+  <!-- full-width rule divides name from content -->
+  <div class="hero-divider"></div>
+
+  <!-- bottom: desc+buttons left, 2×2 stats right -->
+  <div class="hero-bottom">
+    <div class="hero-bl">
+      <div class="hero-sub">
+        <span class="hero-sub-bar"></span>
+        <span class="hero-sub-txt">Chartered Auditor</span>
+      </div>
+      <p class="hero-desc">
+        A decade of precision in financial auditing, compliance, and risk
+        management. Trusted by organizations across Pakistan to ensure
+        integrity, transparency, and financial excellence.
+      </p>
+      <div class="hero-acts">
+        <a href="#contact" class="btn btn-blue btn-mag">
+          <span class="btn-t">Engage My Services</span>
+          <span class="btn-arr">
+            <span class="btn-arr-line"></span>
+            <svg viewBox="0 0 8 8"><polyline points="1,1 7,4 1,7"/></svg>
+          </span>
+        </a>
+        <a href="#experience" class="btn btn-ghost btn-mag">
+          <span class="btn-t">View Experience</span>
+        </a>
+      </div>
+      <div class="hero-scrl">
+        <span class="hero-scrl-bar"></span>
+        <span class="hero-scrl-lbl">Scroll to explore</span>
+      </div>
+    </div>
+    <div class="hero-br">
+      <div class="hero-stats">
+        <div class="hstat">
+          <span class="hstat-n" data-count="10" data-suffix="+">0</span>
+          <span class="hstat-l">Years Exp</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-n">ICMA</span>
+          <span class="hstat-l">Qualified</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-n" data-count="50" data-suffix="+">0</span>
+          <span class="hstat-l">Engagements</span>
+        </div>
+        <div class="hstat">
+          <span class="hstat-n" data-count="100" data-suffix="%">0</span>
+          <span class="hstat-l">Compliance</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ════════════════════════════════════════════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="mq-chunk">
+      <span class="mq-w">Audit</span><span class="mq-s">◆</span>
+      <span class="mq-w">Financial Excellence</span><span class="mq-s">◆</span>
+      <span class="mq-w">Compliance</span><span class="mq-s">◆</span>
+      <span class="mq-w">Risk Management</span><span class="mq-s">◆</span>
+      <span class="mq-w">ICMA Qualified</span><span class="mq-s">◆</span>
+      <span class="mq-w">10+ Years</span><span class="mq-s">◆</span>
+      <span class="mq-w">Due Diligence</span><span class="mq-s">◆</span>
+      <span class="mq-w">IFRS</span><span class="mq-s">◆</span>
+      <span class="mq-w">Internal Controls</span><span class="mq-s">◆</span>
+    </div>
+    <div class="mq-chunk" aria-hidden="true">
+      <span class="mq-w">Audit</span><span class="mq-s">◆</span>
+      <span class="mq-w">Financial Excellence</span><span class="mq-s">◆</span>
+      <span class="mq-w">Compliance</span><span class="mq-s">◆</span>
+      <span class="mq-w">Risk Management</span><span class="mq-s">◆</span>
+      <span class="mq-w">ICMA Qualified</span><span class="mq-s">◆</span>
+      <span class="mq-w">10+ Years</span><span class="mq-s">◆</span>
+      <span class="mq-w">Due Diligence</span><span class="mq-s">◆</span>
+      <span class="mq-w">IFRS</span><span class="mq-s">◆</span>
+      <span class="mq-w">Internal Controls</span><span class="mq-s">◆</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══════════════════════════════════════════════════ -->
+<section id="about" class="about-sec">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="rev-l">
+        <span class="about-left-num">10</span>
+        <span class="about-left-lbl">Years of Practice</span>
+        <p class="about-left-body">Building trust through precision, one engagement at a time.</p>
+      </div>
+      <div class="about-right">
+        <div class="eyebrow reveal">
+          <span class="eyebrow-bar"></span>
+          <span class="eyebrow-txt">About</span>
+        </div>
+        <h2 class="about-head reveal">
+          A Career Built on<br>Trust &amp; Precision
+        </h2>
+        <p class="reveal">
+          With over 10 years of experience in auditing and financial management,
+          Hassan Raza brings a meticulous eye for detail and an unwavering
+          commitment to regulatory compliance. His expertise spans internal and
+          external audits, financial reporting, and risk assessment across diverse industries.
+        </p>
+        <p class="reveal">
+          Qualified from ICMA Pakistan, Hassan combines deep theoretical grounding
+          with extensive practical experience — delivering audits that go beyond
+          numbers to provide genuine strategic insight for organizations.
+        </p>
+        <div class="chips reveal">
+          <span class="chip">ICMA Qualified</span>
+          <span class="chip">10+ Years</span>
+          <span class="chip">Finance Domain</span>
+          <span class="chip">Audit Specialist</span>
+          <span class="chip">IFRS</span>
+          <span class="chip">Risk Advisory</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ═══════════════════════════════════════════════ -->
+<section id="services" class="svc-sec">
+  <div class="wrap">
+    <div class="svc-top">
+      <div>
+        <div class="eyebrow reveal">
+          <span class="eyebrow-bar"></span>
+          <span class="eyebrow-txt">Services</span>
+        </div>
+        <h2 class="sec-h reveal">Areas of<br><span class="gr">Expertise</span></h2>
+      </div>
+      <p class="svc-top-r reveal">
+        Six core disciplines refined over a decade of professional practice —
+        each delivered with the rigour and independence your organization deserves.
+      </p>
+    </div>
+    <div class="svc-grid">
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <polyline points="9 13 11 15 15 11"/>
+        </svg>
+        <span class="svc-num">01</span>
+        <h3 class="svc-title">External Audit</h3>
+        <p class="svc-desc">Independent examination of financial statements ensuring accuracy, completeness, and compliance with IFRS and local regulatory standards.</p>
+      </div>
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+        <span class="svc-num">02</span>
+        <h3 class="svc-title">Internal Audit</h3>
+        <p class="svc-desc">Systematic evaluation of internal controls, risk management frameworks, and governance processes to strengthen organizational integrity.</p>
+      </div>
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+          <line x1="2" y1="20" x2="22" y2="20"/>
+        </svg>
+        <span class="svc-num">03</span>
+        <h3 class="svc-title">Financial Reporting</h3>
+        <p class="svc-desc">Preparation and review of financial statements, management accounts, and regulatory filings with precision and full compliance.</p>
+      </div>
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span class="svc-num">04</span>
+        <h3 class="svc-title">Risk Assessment</h3>
+        <p class="svc-desc">Identification, analysis, and mitigation of financial and operational risks to safeguard organizational assets and reputation.</p>
+      </div>
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span class="svc-num">05</span>
+        <h3 class="svc-title">Compliance Advisory</h3>
+        <p class="svc-desc">Guidance on regulatory compliance including tax laws, SECP requirements, and corporate governance best practices in Pakistan.</p>
+      </div>
+
+      <div class="svc-card reveal">
+        <svg class="svc-icon" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="svc-num">06</span>
+        <h3 class="svc-title">Due Diligence</h3>
+        <p class="svc-desc">Thorough financial due diligence for mergers, acquisitions, and investments — providing clarity before critical decisions.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE ══════════════════════════════════════════════ -->
+<section id="experience" class="exp-sec">
+  <div class="wrap">
+    <div class="exp-top">
+      <div>
+        <div class="eyebrow reveal">
+          <span class="eyebrow-bar"></span>
+          <span class="eyebrow-txt">Experience</span>
+        </div>
+        <h2 class="sec-h reveal">A Decade of<br><span class="gr">Financial</span> Excellence</h2>
+      </div>
+      <p class="exp-top-r reveal">
+        Ten years of building expertise across auditing, compliance, and financial
+        advisory — delivering measurable value to every engagement.
+      </p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-rule"></div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-l"><p class="tl-year">2019 — Present</p></div>
+        <div class="tl-r">
+          <h3 class="tl-role">Senior Auditor</h3>
+          <p class="tl-co">Leading Audit Firm, Karachi</p>
+          <p class="tl-desc">Leading complex audit engagements for mid to large-scale enterprises. Overseeing teams, managing client relationships, and ensuring delivery of high-quality audit reports in compliance with ISA standards.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-l"><p class="tl-year">2016 — 2019</p></div>
+        <div class="tl-r">
+          <h3 class="tl-role">Audit Manager</h3>
+          <p class="tl-co">Financial Services Company</p>
+          <p class="tl-desc">Managed internal audit functions across multiple departments. Implemented risk-based audit methodology and strengthened internal control frameworks, reducing compliance gaps significantly.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-l"><p class="tl-year">2014 — 2016</p></div>
+        <div class="tl-r">
+          <h3 class="tl-role">Audit Supervisor</h3>
+          <p class="tl-co">Manufacturing &amp; Trading Group</p>
+          <p class="tl-desc">Supervised audit teams in reviewing financial records, evaluating internal controls, and preparing detailed management letters with actionable recommendations.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-l"><p class="tl-year">2012 — 2014</p></div>
+        <div class="tl-r">
+          <h3 class="tl-role">Junior Auditor</h3>
+          <p class="tl-co">Chartered Accountancy Practice</p>
+          <p class="tl-desc">Foundation years — hands-on experience in statutory audits, tax compliance, bookkeeping reviews, and preparation of financial statements for diverse client portfolios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══════════════════════════════════════════════════ -->
+<section id="contact" class="contact-sec">
+  <div class="contact-glow"></div>
+  <div class="wrap">
+    <p class="contact-pre reveal">Get in Touch</p>
+    <h2 class="contact-h reveal">Let's Work<br><span class="gr">Together</span></h2>
+    <p class="contact-body reveal">
+      Looking for a trusted auditor with a decade of experience?
+      Reach out to discuss how I can add value to your organization.
+    </p>
+    <a href="mailto:hassan.raza@email.com" class="contact-mail reveal">
+      hassan.raza@email.com
+    </a>
+    <div class="contact-btns reveal">
+      <a href="mailto:hassan.raza@email.com" class="btn btn-blue btn-mag">
+        <span class="btn-t">Send an Email</span>
+        <span class="btn-arr">
+          <span class="btn-arr-line"></span>
+          <svg viewBox="0 0 8 8"><polyline points="1,1 7,4 1,7"/></svg>
+        </span>
+      </a>
+      <a href="tel:+92-000-0000000" class="btn btn-ghost btn-mag">
+        <span class="btn-t">Schedule a Call</span>
+      </a>
+    </div>
+    <div class="contact-strip reveal">
+      <div>
+        <span class="cd-lbl">Location</span>
+        <span class="cd-val">Karachi, Pakistan</span>
+      </div>
+      <div>
+        <span class="cd-lbl">Qualification</span>
+        <span class="cd-val">ICMA Pakistan</span>
+      </div>
+      <div>
+        <span class="cd-lbl">Domain</span>
+        <span class="cd-val">Finance &amp; Audit</span>
+      </div>
+      <div>
+        <span class="cd-lbl">Availability</span>
+        <span class="cd-val">Open to Engagements</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+<footer>
+  <p>© 2026 Hassan Raza. All rights reserved.</p>
+  <span class="ft-brand">Hassan Raza</span>
+  <span class="ft-r">Auditor · ICMA · Karachi</span>
+</footer>
+
+<script>
+/* ── LOADER */
+(function () {
+  const loader = document.getElementById('loader');
+  const numEl  = document.getElementById('ldNum');
+  const fillEl = document.getElementById('ldFill');
+  let prog = 0;
+  document.body.style.overflow = 'hidden';
+
+  const t = setInterval(() => {
+    prog += Math.random() * 18 + 4;
+    if (prog >= 100) {
+      prog = 100;
+      clearInterval(t);
+      numEl.textContent = '100';
+      fillEl.style.width = '100%';
+      setTimeout(() => {
+        loader.classList.add('done');
+        document.body.style.overflow = '';
+        triggerCounters(document.querySelectorAll('[data-count]'));
+      }, 380);
+    } else {
+      numEl.textContent = Math.floor(prog);
+      fillEl.style.width = prog + '%';
+    }
+  }, 44);
+})();
+
+/* ── CUSTOM CURSOR */
+(function () {
+  const dot  = document.getElementById('curDot');
+  const ring = document.getElementById('curRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  (function loop() {
+    dot.style.transform  = `translate(${mx}px,${my}px)`;
+    rx += (mx - rx) * 0.11;
+    ry += (my - ry) * 0.11;
+    ring.style.transform = `translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(loop);
+  })();
+
+  document.querySelectorAll('a, button, .svc-card, .tl-item, .chip, .hstat').forEach(el => {
+    el.addEventListener('mouseenter', () => { dot.classList.add('on'); ring.classList.add('on'); });
+    el.addEventListener('mouseleave', () => { dot.classList.remove('on'); ring.classList.remove('on'); });
+  });
+})();
+
+/* ── NAV ON SCROLL */
+(function () {
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+})();
+
+/* ── HAMBURGER */
+(function () {
+  const btn  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobMenu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+  document.querySelectorAll('.ml').forEach(l => {
+    l.addEventListener('click', () => {
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+    });
+  });
+})();
+
+/* ── SCROLL REVEAL */
+(function () {
+  const els = document.querySelectorAll('.reveal, .rev-l');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const siblings = Array.from(el.parentElement.querySelectorAll('.reveal, .rev-l'));
+      const idx = siblings.indexOf(el);
+      el.style.transitionDelay = (idx * 0.08) + 's';
+      el.classList.add('in');
+
+      io.unobserve(el);
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ── COUNTER ANIMATION */
+function triggerCounters(nodes) {
+  nodes.forEach(el => {
+    if (el.dataset.running) return;
+    el.dataset.running = '1';
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    let cur = 0;
+    const step = target / 50;
+    const timer = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = Math.floor(cur) + suffix;
+      if (cur >= target) clearInterval(timer);
+    }, 28);
+  });
+}
+
+/* ── MAGNETIC BUTTONS */
+(function () {
+  document.querySelectorAll('.btn-mag').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width  / 2) * 0.3;
+      const y = (e.clientY - r.top  - r.height / 2) * 0.3;
+      btn.style.transition = 'transform .1s';
+      btn.style.transform  = `translate(${x}px,${y}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transition = 'transform .55s cubic-bezier(0.23,1,0.32,1)';
+      btn.style.transform  = 'translate(0,0)';
+    });
+  });
+})();
+</script>
+</body>
+</html>
